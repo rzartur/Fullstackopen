@@ -11,6 +11,8 @@ const StatisticLine = ({ text, number }) => (
 );
 
 const Statistics = ({ good, neutral, bad, all, average, positivePercent }) => {
+  if (all === 0) return <p>No feedback given</p>;
+
   return (
     <>
       <StatisticLine text={"good"} number={good} />
