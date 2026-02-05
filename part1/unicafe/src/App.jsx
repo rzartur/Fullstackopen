@@ -10,6 +10,19 @@ const StatisticLine = ({ text, number }) => (
   </p>
 );
 
+const Statistics = ({ good, neutral, bad, all, average, positivePercent }) => {
+  return (
+    <>
+      <StatisticLine text={"good"} number={good} />
+      <StatisticLine text={"neutral"} number={neutral} />
+      <StatisticLine text={"bad"} number={bad} />
+      <StatisticLine text={"all"} number={all} />
+      <StatisticLine text={"average"} number={average} />
+      <StatisticLine text={"positive"} number={positivePercent} />
+    </>
+  );
+};
+
 function App() {
   const [good, setGood] = useState(0);
   const [neutral, setNeutral] = useState(0);
@@ -34,12 +47,14 @@ function App() {
       <Button onClick={handleNeutral} text={"neutral"} />
       <Button onClick={handleBad} text={"bad"} />
       <Header text={"statistics"} />
-      <StatisticLine text={"good"} number={good} />
-      <StatisticLine text={"neutral"} number={neutral} />
-      <StatisticLine text={"bad"} number={bad} />
-      <StatisticLine text={"all"} number={all} />
-      <StatisticLine text={"average"} number={average} />
-      <StatisticLine text={"positive"} number={positivePercent} />
+      <Statistics
+        good={good}
+        neutral={neutral}
+        bad={bad}
+        all={all}
+        average={average}
+        positivePercent={positivePercent}
+      />
     </>
   );
 }
