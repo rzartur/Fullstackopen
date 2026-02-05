@@ -5,23 +5,26 @@ const Button = ({ onClick, text }) => <button onClick={onClick}>{text}</button>;
 const Header = ({ text }) => <h1>{text}</h1>;
 
 const StatisticLine = ({ text, value }) => (
-  <p>
-    {text} {value}
-  </p>
+  <tr>
+    <td>{text}</td>
+    <td>{value}</td>
+  </tr>
 );
 
 const Statistics = ({ good, neutral, bad, all, average, positivePercent }) => {
   if (all === 0) return <p>No feedback given</p>;
 
   return (
-    <div>
-      <StatisticLine text={"good"} value={good} />
-      <StatisticLine text={"neutral"} value={neutral} />
-      <StatisticLine text={"bad"} value={bad} />
-      <StatisticLine text={"all"} value={all} />
-      <StatisticLine text={"average"} value={average} />
-      <StatisticLine text={"positive"} value={positivePercent} />
-    </div>
+    <table>
+      <tbody>
+        <StatisticLine text={"good"} value={good} />
+        <StatisticLine text={"neutral"} value={neutral} />
+        <StatisticLine text={"bad"} value={bad} />
+        <StatisticLine text={"all"} value={all} />
+        <StatisticLine text={"average"} value={average} />
+        <StatisticLine text={"positive"} value={positivePercent} />
+      </tbody>
+    </table>
   );
 };
 
@@ -32,9 +35,10 @@ function App() {
 
   const all = good + neutral + bad;
 
-  const average = all === 0 ? 0 : (good - bad) / all;
+  const average = all === 0 ? 0 : ((good - bad) / all).toFixed(1);
 
-  const positivePercent = all === 0 ? 0 + " %" : (good / all) * 100 + " %";
+  const positivePercent =
+    all === 0 ? 0 + " %" : ((good / all) * 100).toFixed(1) + " %";
 
   const handleGood = () => setGood(good + 1);
 
