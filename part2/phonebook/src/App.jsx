@@ -4,11 +4,29 @@ const App = () => {
   const [persons, setPersons] = useState([{ name: "Arto Hellas" }]);
   const [newName, setNewName] = useState("Enter full name");
 
+  /*const exists =
+    persons.filter((person) => person.name === newName.trim()).length > 0;
+  */
+  const exists = persons.some(
+    (person) => person.name.toLowerCase() === newName.trim().toLowerCase(),
+  );
+
   const addName = (event) => {
     event.preventDefault();
-    console.log("add clicked");
+    console.log("empty");
+
+    if (!newName.trim() || newName === "Enter full name") {
+      alert(`Field cant be blank`);
+      return;
+    }
+
+    if (exists) {
+      alert(`${newName} is already added to phonebook`);
+      return;
+    }
+
     const newPerson = {
-      name: newName,
+      name: newName.trim(),
     };
     //setPersons(persons.concat(newPerson));
     setPersons([...persons, newPerson]);
