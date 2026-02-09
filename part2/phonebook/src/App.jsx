@@ -1,4 +1,7 @@
 import { useState } from "react";
+import SearchFilter from "./components/SearchFilter";
+import NewPerson from "./components/NewPerson";
+import Numbers from "./components/Numbers";
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -7,8 +10,8 @@ const App = () => {
     { name: "Dan Abramov", number: "12-43-234345", id: 3 },
     { name: "Mary Poppendieck", number: "39-23-6423122", id: 4 },
   ]);
-  const [newName, setNewName] = useState("Enter full name");
-  const [newNumber, setNewNumber] = useState("Enter phone number");
+  const [newName, setNewName] = useState("");
+  const [newNumber, setNewNumber] = useState("");
   const [newSearch, setNewSearch] = useState("");
 
   /*const exists =
@@ -20,7 +23,7 @@ const App = () => {
 
     //console.log("empty");
 
-    if (!newName.trim() || newName.trim() === "Enter full name") {
+    if (!newName.trim()) {
       alert(`Name field cant be blank`);
       return;
     }
@@ -34,7 +37,7 @@ const App = () => {
       return;
     }
 
-    if (newNumber.trim() === "Enter phone number") {
+    if (!newNumber.trim()) {
       alert(`Enter a phone number`);
       return;
     }
@@ -55,7 +58,7 @@ const App = () => {
     setNewName(event.target.value);
   };
 
-  const handleChangePhone = (event) => {
+  const handleChangeNumber = (event) => {
     setNewNumber(event.target.value);
   };
 
@@ -76,27 +79,15 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <div>
-        filter shown with <input onChange={handleSearch} />
-      </div>
-      <h2>add a new</h2>
-      <form onSubmit={addPerson}>
-        <div>
-          name: <input value={newName} onChange={handleChangeName} />
-        </div>
-        <div>
-          number: <input value={newNumber} onChange={handleChangePhone} />
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
-      <h2>Numbers</h2>
-      {searchResult.map((person) => (
-        <p key={person.id}>
-          {person.name} {person.number}
-        </p>
-      ))}
+      <SearchFilter handleSearch={handleSearch} />
+      <NewPerson
+        addPerson={addPerson}
+        newName={newName}
+        handleChangeName={handleChangeName}
+        handleChangeNumber={handleChangeNumber}
+        newNumber={newNumber}
+      />
+      <Numbers searchResult={searchResult} />
     </div>
   );
 };
