@@ -51,9 +51,12 @@ const App = () => {
       id: persons.length + 1,
     };
     //setPersons(persons.concat(newPerson));
-    setPersons([...persons, newPerson]);
-    setNewName("");
-    setNewNumber("");
+    axios.post("http://localhost:3001/persons", newPerson).then((response) => {
+      console.log("response: ", response.data);
+      setPersons([...persons, response.data]);
+      setNewName("");
+      setNewNumber("");
+    });
   };
 
   const handleChangeName = (event) => {
