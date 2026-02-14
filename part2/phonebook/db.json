@@ -1,44 +1,14 @@
 {
   "persons": [
     {
-      "name": "Arto Hellas",
-      "number": "040-123456",
-      "id": "1"
+      "id": "22db",
+      "name": "1",
+      "number": "1"
     },
     {
-      "name": "Ada Lovelace",
-      "number": "39-44-5323523",
-      "id": "2"
-    },
-    {
-      "name": "Dan Abramov",
-      "number": "12-43-234345",
-      "id": "3"
-    },
-    {
-      "name": "Mary Poppendieck",
-      "number": "39-23-6423122",
-      "id": "4"
-    },
-    {
-      "name": "Bob Summer",
-      "number": "55-22-6423133",
-      "id": "5"
-    },
-    {
-      "id": "59f8",
-      "name": "a",
-      "number": "a"
-    },
-    {
-      "id": "942e",
-      "name": "ffsa",
-      "number": "fsaf"
-    },
-    {
-      "id": "fb70",
-      "name": "313",
-      "number": "231"
+      "id": "5a0d",
+      "name": "2",
+      "number": "2"
     }
   ]
 }

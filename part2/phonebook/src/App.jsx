@@ -81,6 +81,20 @@ const App = () => {
     return person.name.toLowerCase().includes(newSearch.trim().toLowerCase());
   });
 
+  const handleRemovePerson = (id) => {
+    const person = persons.find((person) => person.id === id);
+
+    if (window.confirm(`Delete ${person.name}?`)) {
+      personService
+        .remove(id)
+        .then(() => {
+          setPersons(persons.filter((person) => person.id !== id));
+        })
+        .catch(() => alert(`the person ${person.name} was already deleted`));
+      setPersons(persons.filter((person) => person.id !== id));
+    }
+  };
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -92,7 +106,10 @@ const App = () => {
         handleChangeNumber={handleChangeNumber}
         newNumber={newNumber}
       />
-      <Numbers searchResult={searchResult} />
+      <Numbers
+        searchResult={searchResult}
+        handleRemovePerson={handleRemovePerson}
+      />
     </div>
   );
 };
