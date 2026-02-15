@@ -36,7 +36,33 @@ const App = () => {
     );
 
     if (exists) {
-      alert(`${newName} is already added to phonebook`);
+      if (
+        window.confirm(
+          `${newName} is already added to phonebook, replace old numebr with new one?`,
+        )
+      ) {
+        const person = persons.find(
+          (person) =>
+            person.name.toLowerCase() === newName.toLowerCase().trim(),
+        );
+        console.log("person: ", person);
+
+        const updatedPerson = { ...person, number: newNumber };
+        console.log("updatedPerson: ", updatedPerson);
+
+        personService
+          .update(updatedPerson.id, updatedPerson)
+          .then((returnedPerson) => {
+            setPersons(
+              persons.map((person) =>
+                person.id === returnedPerson.id ? returnedPerson : person,
+              ),
+            );
+            setNewName("");
+            setNewNumber("");
+          });
+        return;
+      }
       return;
     }
 
@@ -90,8 +116,10 @@ const App = () => {
         .then(() => {
           setPersons(persons.filter((person) => person.id !== id));
         })
-        .catch(() => alert(`the person ${person.name} was already deleted`));
-      setPersons(persons.filter((person) => person.id !== id));
+        .catch(() => {
+          alert(`the person ${person.name} was already deleted`);
+          setPersons(persons.filter((person) => person.id !== id));
+        });
     }
   };
 

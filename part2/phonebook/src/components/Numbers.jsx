@@ -3,10 +3,10 @@ const Numbers = ({ searchResult, handleRemovePerson }) => {
     <>
       <h2>Numbers</h2>
       {searchResult.map((person) => (
-        <div key={person.id}>
+        <p key={person.id}>
           {person.name} {person.number}{" "}
           <button onClick={() => handleRemovePerson(person.id)}>delete</button>
-        </div>
+        </p>
       ))}
     </>
   );
