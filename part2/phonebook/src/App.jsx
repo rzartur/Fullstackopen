@@ -60,7 +60,22 @@ const App = () => {
                 person.id === returnedPerson.id ? returnedPerson : person,
               ),
             );
-            setMessage(`Changed number to ${returnedPerson.number}`);
+            setMessage({
+              text: `Changed number to ${returnedPerson.number}`,
+              type: "success",
+            });
+            setTimeout(() => {
+              setMessage(null);
+            }, 5000);
+            setNewName("");
+            setNewNumber("");
+          })
+          .catch(() => {
+            setMessage({
+              text: `Information of ${person.name} had already been removed from server`,
+              type: "error",
+            });
+            setPersons(persons.filter((p) => p.id !== person.id));
             setTimeout(() => {
               setMessage(null);
             }, 5000);
@@ -87,7 +102,7 @@ const App = () => {
       setPersons([...persons, returnedPerson]);
       setNewName("");
       setNewNumber("");
-      setMessage(`Added ${returnedPerson.name}`);
+      setMessage({ text: `Added ${returnedPerson.name}`, type: "success" });
       setTimeout(() => {
         setMessage(null);
       }, 5000);
@@ -132,6 +147,8 @@ const App = () => {
         });
     }
   };
+
+  console.log(message);
 
   return (
     <div>
