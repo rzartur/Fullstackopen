@@ -4,8 +4,9 @@ import Countries from "./components/Countries";
 import DetailedCountry from "./components/DetailedCountry";
 
 function App() {
-  const [countries, setCountries] = useState(null);
+  const [countries, setCountries] = useState([]);
   const [newSearch, setNewSearch] = useState("");
+  const [newWeather, setNewWeather] = useState(null);
 
   useEffect(() => {
     axios
@@ -15,6 +16,26 @@ function App() {
       });
   }, []);
 
+  const searchResult = countries.filter((country) => {
+    return country.name.common
+      .toLowerCase()
+      .includes(newSearch.toLowerCase().trim());
+  });
+
+  useEffect(() => {
+    if (searchResult.length === 1) {
+      const capital = searchResult[0].capital[0];
+      const apiKey = import.meta.env.VITE_SOME_KEY;
+      axios
+        .get(
+          `https://api.openweathermap.org/data/2.5/weather?q=${capital}&units=metric&appid=${apiKey}`,
+        )
+        .then((response) => {
+          setNewWeather(response.data);
+        });
+    }
+  }, [searchResult]);
+
   if (!countries) {
     return null;
   }
@@ -23,11 +44,7 @@ function App() {
     setNewSearch(event.target.value);
   };
 
-  const searchResult = countries.filter((country) => {
-    return country.name.common
-      .toLowerCase()
-      .includes(newSearch.toLowerCase().trim());
-  });
+  console.log(newWeather);
 
   return (
     <div>
@@ -39,7 +56,7 @@ function App() {
         newSearch={newSearch}
         setNewSearch={setNewSearch}
       />
-      <DetailedCountry searchResult={searchResult} />
+      <DetailedCountry searchResult={searchResult} newWeather={newWeather} />
     </div>
   );
 }
