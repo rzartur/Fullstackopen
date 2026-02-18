@@ -64,6 +64,19 @@ const getId = () => {
 app.post("/api/persons", (request, response) => {
   const body = request.body;
 
+  if (!body.name || !body.number) {
+    return response.status(400).json({ error: "name or number missing" });
+  }
+
+  const exists = persons.some(
+    (person) =>
+      person.name.trim().toLowerCase() === body.name.trim().toLowerCase(),
+  );
+
+  if (exists) {
+    return response.status(400).json({ error: "name must be unique" });
+  }
+
   const person = {
     id: getId(),
     name: body.name,

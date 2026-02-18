@@ -1,11 +1,12 @@
 GET http://localhost:3001/api/persons
-### 
+
+### New person
 POST http://localhost:3001/api/persons
 Content-Type: application/json
 
 {
-    "name": "Igor Kobylka",
-    "number": "666-666-666"
+"name": "Mary Poppendieck",
+"number": "39-23-6423122"
 }
 ###
 GET http://localhost:3001/api/persons
