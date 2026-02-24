@@ -59,23 +59,24 @@ app.get("/api/persons", (request, response) => {
   });
 });
 
-app.get("/info", (request, response) => {
+app.get("/info", (request, response, next) => {
   const date = new Date();
-  Person.find({}).then((persons) => {
-    response.send(
-      `<p>Phonebook has ${persons.length} info for people</p> ${date}`,
-    );
-  });
+  Person.find({})
+    .then((persons) => {
+      response.send(
+        `<p>Phonebook has ${persons.length} info for people</p> ${date}`,
+      );
+    })
+    .catch((error) => next(error));
 });
 
 app.get("/api/persons/:id", (request, response, next) => {
   Person.findById(request.params.id)
     .then((person) => {
-      if (person) {
-        response.json(person);
-      } else {
-        response.status(404).end();
+      if (!person) {
+        return response.status(404).end();
       }
+      response.json(person);
     })
     .catch((error) => next(error));
 });
