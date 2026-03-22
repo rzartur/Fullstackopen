@@ -5,6 +5,7 @@ const mongoose = require('mongoose')
 const Blog = require('../models/blog')
 const helper = require('./test_helper')
 const assert = require('node:assert')
+const { send } = require('node:process')
 
 const api = supertest(app)
 
@@ -57,6 +58,45 @@ test('a valid blog can be added', async () => {
     const titles = blogsAtEnd.map(b => b.title)
  
     assert(titles.includes('Test name'))
+})
+
+test('if likes property is missing it defaults to 0', async () => {
+    const newBlog = {
+        title: "Test name",
+        author: "Autor test",
+        url: "www.costam1.com",
+    }
+
+    const response = await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(201)
+
+    assert.strictEqual(response.body.likes, 0)   
+})
+
+test.only('fails with status code 400 when title is missing', async () => {
+    const newBlog = {
+        author: "Autor test",
+        url: "www.costam1.com",
+    }
+
+    await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(400)
+})
+
+test.only('fails with status code 400 when url is missing', async () => {
+    const newBlog = {
+        title: "Test name",
+        author: "Autor test",
+    }
+
+    await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(400)
 })
 
 after(async () => {
