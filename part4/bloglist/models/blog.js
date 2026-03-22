@@ -8,7 +8,7 @@ const blogSchema = mongoose.Schema({
   author: String,
   url: {
     type: String,
-    required: true,
+    required: [true, 'url is required']
   },
   likes: {
     type: Number,
