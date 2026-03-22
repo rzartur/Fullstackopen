@@ -87,7 +87,7 @@ test.only('fails with status code 400 when title is missing', async () => {
         .expect(400)
 })
 
-test.only('fails with status code 400 when url is missing', async () => {
+test('fails with status code 400 when url is missing', async () => {
     const newBlog = {
         title: "Test name",
         author: "Autor test",
@@ -97,6 +97,22 @@ test.only('fails with status code 400 when url is missing', async () => {
         .post('/api/blogs')
         .send(newBlog)
         .expect(400)
+})
+
+test.only('a note can be deleted', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    const blogToDelete = blogsAtStart[0]
+    
+    await api
+        .delete(`/api/blogs/${blogToDelete.id}`)
+        .expect(204)
+    
+    const blogsAtEnd = await helper.blogsInDb()
+
+    const ids = blogsAtEnd.map(b => b.id)
+    assert(!ids.includes(blogToDelete.id))
+    
+    assert.strictEqual(blogsAtEnd.length, blogsAtStart.length - 1)
 })
 
 after(async () => {
