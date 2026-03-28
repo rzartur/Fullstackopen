@@ -1,9 +1,10 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjY5YzdmNDFlNTc2OWI3ZjdiNWFkNTNjZiIsImlhdCI6MTc3NDcyOTcxNCwiZXhwIjoxNzc0NzI5NzQ0fQ.Qo8hXNkxvREncUbN27bBmAt8GnNMmmufk9ls7S2tn-4
 
 {
-  "title": "Cos nowego",
+  "title": "EEEEEEEEEE",
   "author": "Napisane",
   "url": "www.cos3.com",
-  "likes": 50
+  "likes": 44
 }
