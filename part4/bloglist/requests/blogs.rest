@@ -1,0 +1,27 @@
+# @name login
+POST http://localhost:3003/api/login
+Content-Type: application/json
+
+{
+    "username": "Wojtek",
+    "password": "password"
+}
+
+### Create blog
+
+@authToken = {{login.response.body.token}}
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "title": "AAAAAAAA4444",
+  "author": "Napisane",
+  "url": "www.cos3.com",
+  "likes": 44
+}
+
+### Delete blog
+
+DELETE http://localhost:3003/api/blogs/69c946989b33b7c46c3b5e1a
+Authorization: Bearer {{authToken}}

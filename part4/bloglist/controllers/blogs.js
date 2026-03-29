@@ -1,5 +1,6 @@
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
+const user = require('../models/user')
 const User = require('../models/user')
 const jwt = require('jsonwebtoken')
 
@@ -40,7 +41,29 @@ blogsRouter.post('/', async (request, response) => {
 })
 
 blogsRouter.delete('/:id', async (request, response) => {
-  await Blog.findByIdAndDelete(request.params.id)
+  const decodedToken = jwt.verify(request.token, process.env.SECRET)
+
+  if (!decodedToken.id) {
+    return response.status(401).json({ error: 'token invalid' })
+  }
+
+  const blog = await Blog.findById(request.params.id)
+
+  if (!blog) {
+    return response.status(404).json({ error: 'blog not found' })
+  }
+
+    if (decodedToken.id !== blog.user.toString()) {
+    return response.status(401).json({ error: 'no permissions to delete blog' })
+  }
+  
+  await Blog.findByIdAndDelete(blog.id)
+
+  const user = await User.findById(decodedToken.id)
+  user.blogs = user.blogs.filter(b => b.toString() !== request.params.id)
+  await user.save()
+
+
   response.status(204).end()
 })
 
