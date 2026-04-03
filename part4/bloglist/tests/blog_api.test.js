@@ -3,16 +3,28 @@ const supertest = require('supertest')
 const app = require('../app')
 const mongoose = require('mongoose')
 const Blog = require('../models/blog')
+const User = require('../models/user')
 const helper = require('./test_helper')
 const assert = require('node:assert')
-const { send } = require('node:process')
 
 const api = supertest(app)
 
 describe('when there is initially some notes saved', () => {
     beforeEach(async () => {
         await Blog.deleteMany({})
-        await Blog.insertMany(helper.initialBlogs)
+        
+        await User.deleteMany({})
+
+        const user = await helper.getUser()
+        const savedUser = await user.save()   
+
+        const id = savedUser._id
+
+        const blogs = helper.initialBlogs.map(b => {
+            return {...b, user: id}
+        })
+
+        await Blog.insertMany(blogs)
     })
 
     test('blogs are returned as json', async () => {
@@ -36,7 +48,7 @@ describe('when there is initially some notes saved', () => {
         assert.strictEqual(blog._id, undefined)
     })
 
-    test('a valid blog can be added', async () => {
+    test.only('a valid blog can be added', async () => {
         const blogsAtStart = await helper.blogsInDb()
 
         const newBlog = {
@@ -45,9 +57,16 @@ describe('when there is initially some notes saved', () => {
             url: "www.costam1.com",
             likes: 4,
         }
+        
+        const loginResponse = await api
+            .post('/api/login')
+            .send({ username: 'Wojtek', password: 'admin' })
+        
+        const token = loginResponse.body.token
 
         await api
             .post('/api/blogs')
+            .set('Authorization', `Bearer ${token}`)
             .send(newBlog)
             .expect(201)
             .expect('Content-Type', /application\/json/)
@@ -68,8 +87,16 @@ describe('when there is initially some notes saved', () => {
             url: "www.costam1.com",
         }
 
+        const loginResponse = await api
+            .post('/api/login')
+            .send({ username: 'Wojtek', password: 'admin'})
+            .expect(200)
+        
+        const token = loginResponse.body.token
+
         const response = await api
             .post('/api/blogs')
+            .set('Authorization', `Bearer ${token}`)
             .send(newBlog)
             .expect(201)
 
@@ -82,8 +109,16 @@ describe('when there is initially some notes saved', () => {
             url: "www.costam1.com",
         }
 
+        const loginResponse = await api
+            .post('/api/login')
+            .send({ username: 'Wojtek', password: 'admin'})
+            .expect(200)
+        
+        const token = loginResponse.body.token
+
         await api
             .post('/api/blogs')
+            .set('Authorization', `Bearer ${token}`)
             .send(newBlog)
             .expect(400)
     })
@@ -94,8 +129,16 @@ describe('when there is initially some notes saved', () => {
             author: "Autor test",
         }
 
+        const loginResponse = await api
+            .post('/api/login')
+            .send({ username: 'Wojtek', password: 'admin'})
+            .expect(200)
+
+        const token = loginResponse.body.token
+
         await api
             .post('/api/blogs')
+            .set('Authorization', `Bearer ${token}`)
             .send(newBlog)
             .expect(400)
     })
@@ -104,8 +147,19 @@ describe('when there is initially some notes saved', () => {
         const blogsAtStart = await helper.blogsInDb()
         const blogToDelete = blogsAtStart[0]
         
+        const loginResponse = await api
+            .post('/api/login')
+            .send({ username: 'Wojtek', password: 'admin'})
+            .expect(200)
+
+        const token = loginResponse.body.token
+
+        console.log('TOKEN', token);
+        
+
         await api
             .delete(`/api/blogs/${blogToDelete.id}`)
+            .set('Authorization', `Bearer ${token}`)
             .expect(204)
         
         const blogsAtEnd = await helper.blogsInDb()

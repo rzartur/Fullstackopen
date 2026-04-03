@@ -15,7 +15,7 @@ Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
 {
-  "title": "AAAAAAAA555",
+  "title": "AAAAAAAA999",
   "author": "Napisane",
   "url": "www.cos3.com",
   "likes": 44
@@ -23,7 +23,7 @@ Authorization: Bearer {{authToken}}
 
 ### Delete blog
 
-DELETE http://localhost:3003/api/blogs/69c946989b33b7c46c3b5e1a
+DELETE http://localhost:3003/api/blogs/69c7f7eacf761174ddeb3b18
 Authorization: Bearer {{authToken}}
 
 ### Get all blogs
