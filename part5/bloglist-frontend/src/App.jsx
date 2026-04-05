@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import Notification from './components/Notification'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -11,6 +12,7 @@ const App = () => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
+  const [message, setMessage] = useState(null)
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -36,8 +38,12 @@ const App = () => {
      blogService.setToken(user.token)
      setUsername('')
      setPassword('')
-    } catch {
-      console.log('Wrong credentials');
+    } catch(exception) {
+      setMessage({
+        text: exception.response.data.error || 'An error occured',
+        type: 'error'
+      })
+      setTimeout(() => setMessage(null), 2000)
       
     }
   }
@@ -100,8 +106,21 @@ const App = () => {
       setAuthor('')
       setTitle('')
       setUrl('')
+
+      setMessage({
+        text: `Added ${savedBlog.title}`,
+        type: 'success'
+      })
+
+      setTimeout(() => {
+        setMessage(null)
+      }, 2000)
     } catch (exception) {
-        console.log('Failed to create blog', exception);
+        setMessage({
+          text: exception.response.data.error || 'An error occured',
+          type: 'error'
+        })
+        setTimeout(() => setMessage(null), 3000)
     }
   }
 
@@ -144,9 +163,9 @@ const App = () => {
     </div>
   )
 
-  
   return (
     <div>
+      <Notification message={message}/>
       {!user && loginForm()}
       { user && 
         (
